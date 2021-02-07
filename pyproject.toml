@@ -1,0 +1,6 @@
+[build-system]
+requires = [
+    "ruuvitag_sensor",
+    "paho-mqtt"
+]
+build-backend = "setuptools.build_meta"

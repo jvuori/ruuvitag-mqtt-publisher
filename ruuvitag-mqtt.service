@@ -1,0 +1,13 @@
+[Unit]
+Description=RuuviTag MQTT Publisher
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=python3 -m ruuvitag_mqtt
+
+[Install]
+WantedBy=multi-user.target
