@@ -1,7 +1,9 @@
 {
     "broker": {
         "host": "localhost",
-        "port": 1883
+        "port": 1883,
+        "username": null,
+        "password": null
     },
     "ruuvitags": {
     }

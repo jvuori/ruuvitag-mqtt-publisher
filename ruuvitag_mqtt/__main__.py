@@ -41,6 +41,12 @@ def start_publishing(config_file_path: Path):
         config = json.load(config_file)
     print(config)
 
+    username = config.get("broker", {}).get("username")
+    if username:
+        logger.info("Using authentication: %s", username)
+        password = config.get("broker", {}).get("password")
+        mqtt_client.username_pw_set(username=username, password=password)
+
     mqtt_client.connect(
         host=config.get("broker", {}).get("host", "localhost"),
         port=config.get("broker", {}).get("port", 1883),
