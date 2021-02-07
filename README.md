@@ -1,8 +1,8 @@
-# ruuvitag_mqtt
+# RuuviTag MQTT Publisher
 
-RuuviTag MQTT Publisher. Designed for Raspberry Pi Zero W.
+Publishes [RuuviTag](https://ruuvi.com/) events to [MQTT](https://mqtt.org/) broker. Designed to run on [Raspberry Pi](https://www.raspberrypi.org/) devices having [Bluetooth LE](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy) capabilities, for example [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero/).
 
-# Install
+# Installation
 
 ## Libs and the actual service
 
@@ -18,7 +18,7 @@ Then clone the repo and run installation procedure:
     sudo python3 -m pip install .
     sudo ./setup_service.sh
 
-The setup script creates a Systemd setup file and enables the ```ruuvitag-mqtt.service``` to start automatically on startup.
+The setup script creates a [Systemd](https://www.freedesktop.org/wiki/Software/systemd/) setup file and enables the ```ruuvitag-mqtt.service``` to start automatically on startup.
 
 Note: For now _RuuviTag MQTT Publisher_ can't be run without ```sudo```. The restriction comes from ruuvitag-sensor library which uses ```sudo``` internally.
 
