@@ -7,7 +7,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=python3 -m ruuvitag_mqtt -c /etc/ruuvitag-mqtt.conf
+ExecStart=python3 -m ruuvitag_mqtt -c /etc/ruuvitag-mqtt.json
 
 [Install]
 WantedBy=multi-user.target
