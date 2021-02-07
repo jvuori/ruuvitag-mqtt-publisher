@@ -9,12 +9,18 @@ RuuviTag MQTT Publisher. Designed for Raspberry Pi Zero W.
 Install prerequisites by following the instructions here:
 https://github.com/ttu/ruuvitag-sensor
 
-Then clone the repo and run:
+Then clone the repo and run installation procedure:
+
+    git clone https://github.com/jvuori/ruuvitag-mqtt-publisher.git
+
+    cd ruuvitag-mqtt-publisher
 
     sudo python3 -m pip install .
-    ./setup_service.sh
+    sudo ./setup_service.sh
 
 The setup script creates a Systemd setup file and enables the ```ruuvitag-mqtt.service``` to start automatically on startup.
+
+Note: For now _RuuviTag MQTT Publisher_ can't be run without ```sudo```. The restriction comes from ruuvitag-sensor library which uses ```sudo``` internally.
 
 
 ## Configuration
@@ -54,6 +60,6 @@ Example:
 
 ## Troubleshooting
 
-Run RuuviTag MQTT Publisher from terminal:
+Run _RuuviTag MQTT Publisher_ from terminal:
 
     sudo python3 -m ruuvitag_mqtt -c my_config_file.json
