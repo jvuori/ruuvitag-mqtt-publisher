@@ -1,6 +1,6 @@
-# ruuvitag-mqtt
+# ruuvitag_mqtt
 
-RuuviTag MQTT Publisher. Meant to be installed on Raspberry Pi Zero.
+RuuviTag MQTT Publisher. Designed for Raspberry Pi Zero W.
 
 # Install
 
@@ -50,3 +50,10 @@ Example:
 ## Start service
 
     systemctl start ruuvitag-mqtt.service
+
+
+## Troubleshooting
+
+Run RuuviTag MQTT Publisher from terminal:
+
+    sudo python3 -m ruuvitag_mqtt -c my_config_file.json
