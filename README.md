@@ -11,8 +11,6 @@ https://github.com/ttu/ruuvitag-sensor
 
 Then clone the repo and run:
 
-    sudo python3 -m pip install -U pip setuptools
-
     sudo python3 -m pip install .
     ./setup_service.sh
 
@@ -21,7 +19,7 @@ The setup script creates a Systemd setup file and enables the ```ruuvitag-mqtt.s
 
 ## Configuration
 
-Write config file: ```/etc/ruuvitag-mqtt.conf```
+Modify config file: ```/etc/ruuvitag-mqtt.conf```
 
 Example:
 
@@ -34,24 +32,19 @@ Example:
         "ruuvitags": {
             "DE:D4:96:2C:3C:78": {
                 "name": "kitchen",
-                "fields": ["temperature", "humidity"],
-                "retain": true
+                "fields": ["temperature", "humidity"]
             },
             "E3:35:52:F1:D2:AA": {
                 "name": "terrace",
-                "fields": ["temperature", "humidity", "pressure"],
-                "retain": true
+                "fields": ["temperature", "humidity", "pressure"]
             },
             "F9:89:71:39:A5:82": {
                 "name": "sauna",
-                "fields": ["temperature", "humidity"],
-                "retain": true
+                "fields": ["temperature", "humidity"]
             }
         }
     }
 ```
-
-Note: The file must exist. By default service uses localhost:1883 as the broker address so if the broker is running on the same machine then just an empty JSON dictionary is the minimum configuration needed.
 
 
 ## Start service
