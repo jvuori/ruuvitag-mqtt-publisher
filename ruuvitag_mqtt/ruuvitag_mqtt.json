@@ -5,6 +5,7 @@
         "username": null,
         "password": null
     },
+    "topic_prefix": "myhome/",
     "ruuvitags": {
     }
 }

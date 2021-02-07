@@ -33,8 +33,11 @@ Example:
     {
         "broker": {
             "host": "192.168.1.11",
-            "port": 1883
+            "port": 1883,
+            "username": null,
+            "password": null
         },
+        "topic_prefix": "myhome/",
         "ruuvitags": {
             "DE:D4:96:2C:3C:78": {
                 "name": "kitchen",

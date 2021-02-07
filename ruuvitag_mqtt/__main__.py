@@ -7,7 +7,7 @@ from paho.mqtt import client as mqtt
 from paho.mqtt.properties import Properties, PacketTypes
 from ruuvitag_sensor.ruuvi import RuuviTagSensor
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
@@ -18,13 +18,13 @@ def on_ruuvi_event(ruuvi_event):
     mac_address, data = ruuvi_event
     configured_ruuvitags = config.get("ruuvitags", {})
     location = configured_ruuvitags.get(mac_address, {}).get("name", mac_address)
-
+    topic_prefix = config.get("topic_prefix", "")
     mqtt_client.reconnect()
     for key, value in data.items():
         fields = configured_ruuvitags.get(mac_address, {}).get("fields")
         if fields is None or key in fields:
             mqtt_client.publish(
-                f"home/{location}/{key}",
+                f"{topic_prefix}{location}/{key}",
                 value,
             )
     mqtt_client.disconnect()
