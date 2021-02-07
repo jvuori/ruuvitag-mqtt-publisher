@@ -58,8 +58,17 @@ Example:
     systemctl start ruuvitag-mqtt.service
 
 
-## Troubleshooting
+# Troubleshooting
 
 Run _RuuviTag MQTT Publisher_ from terminal:
 
     sudo python3 -m ruuvitag_mqtt -c my_config_file.json
+
+
+# Alternatives and inspiration
+
+[ruuvi2mqtt](https://github.com/ppetru/ruuvi2mqtt) is another publisher service written with Node.js. Seems to be supporting MQTT Discovery.
+
+[Basic MQTT publisher for Ruuvitags](https://f.ruuvi.com/t/basic-mqtt-publisher-for-ruuvitags/3978): Python code snippet found in [Ruuvi Forum](https://f.ruuvi.com/).
+
+[post_to_mqtt.py](https://github.com/ttu/ruuvitag-sensor/blob/master/examples/post_to_mqtt.py): Example script where configuration is based on various command line arguments.
