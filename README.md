@@ -41,14 +41,17 @@ Example:
         "ruuvitags": {
             "DE:D4:96:2C:3C:78": {
                 "name": "kitchen",
+                "retain": true,
                 "fields": ["temperature", "humidity"]
             },
             "E3:35:52:F1:D2:AA": {
                 "name": "terrace",
+                "retain": false,
                 "fields": ["temperature", "humidity", "pressure"]
             },
             "F9:89:71:39:A5:82": {
                 "name": "sauna",
+                "retain": true,
                 "fields": ["temperature", "humidity"]
             }
         }
