@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ruuvitag-mqtt-publisher",
-    version="0.0.1",
+    version="0.0.2",
     author="Jaakko Vuori",
     author_email="jaakko.vuori@gmail.com",
     description="RuuviTag MQTT Publisher",
