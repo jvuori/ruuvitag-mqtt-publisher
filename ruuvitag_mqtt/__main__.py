@@ -38,7 +38,7 @@ def start_publishing(config_file_path: Path):
     logger.info("Using config file: %s", config_file_path)
 
     if not config_file_path:
-        config_file_path = Path(__file__).parent / "ruuvitag_mqtt.json"
+        config_file_path = Path(__file__).parent / "ruuvitag-mqtt.json"
     with open(config_file_path) as config_file:
         config = json.load(config_file)
     print(config)
