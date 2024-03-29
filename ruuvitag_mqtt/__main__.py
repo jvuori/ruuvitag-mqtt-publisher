@@ -6,10 +6,14 @@ import time
 
 from paho.mqtt import client as mqtt
 from ruuvitag_sensor.ruuvi import RuuviTagSensor
+from ruuvitag_sensor import adapters
 
 logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+
+adapter = adapters.get_ble_adapter()
+logger.info("Using BLE adapter: %s", adapter)
 
 mqtt_client = mqtt.Client("RuuviTag")
 
