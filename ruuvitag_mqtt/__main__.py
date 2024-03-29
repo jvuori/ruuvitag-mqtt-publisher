@@ -60,7 +60,7 @@ def start_publishing(config_file_path: Path):
         except OSError as e:
             logger.error("Failed to connect to MQTT broker: %s", e)
             retry_count += 1
-            time.sleep(1)
+            time.sleep(10)
     else:
         msg = "Failed to connect to MQTT broker after multiple retries. Exiting..."
         raise ConnectionError(msg)
