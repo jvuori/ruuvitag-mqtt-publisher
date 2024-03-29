@@ -49,6 +49,7 @@ def start_publishing(config_file_path: Path):
         password = config.get("broker", {}).get("password")
         mqtt_client.username_pw_set(username=username, password=password)
 
+    logger.info("Connecting to MQTT broker")
     retry_count = 0
     while retry_count < 10:
         try:
@@ -59,11 +60,13 @@ def start_publishing(config_file_path: Path):
             break
         except OSError as e:
             logger.error("Failed to connect to MQTT broker: %s", e)
+            logger.info("Retrying in 10 seconds. Retry count: %d", retry_count + 1)
             retry_count += 1
             time.sleep(10)
     else:
         msg = "Failed to connect to MQTT broker after multiple retries. Exiting..."
         raise ConnectionError(msg)
+    logger.info("Connected to MQTT broker")
 
     mqtt_client.disconnect()
 
@@ -75,4 +78,5 @@ if __name__ == "__main__":
     argument_parser.add_argument("-c", dest="config_file")
     args = argument_parser.parse_args()
 
+    logging.basicConfig(level=logging.INFO)
     start_publishing(args.config_file)
