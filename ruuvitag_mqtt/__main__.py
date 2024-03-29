@@ -77,6 +77,9 @@ def start_publishing(config_file_path: Path):
 
     mqtt_client.disconnect()
 
+    found_tags = RuuviTagSensor.find_ruuvitags()
+    logger.info("Found RuuviTags: %s", found_tags)
+
     RuuviTagSensor.get_datas(on_ruuvi_event)
 
 
