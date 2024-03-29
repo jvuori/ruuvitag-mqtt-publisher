@@ -2,9 +2,9 @@ import argparse
 from pathlib import Path
 import json
 import logging
+import time
 
 from paho.mqtt import client as mqtt
-from paho.mqtt.properties import Properties, PacketTypes
 from ruuvitag_sensor.ruuvi import RuuviTagSensor
 
 logging.basicConfig(level=logging.INFO)
@@ -49,10 +49,22 @@ def start_publishing(config_file_path: Path):
         password = config.get("broker", {}).get("password")
         mqtt_client.username_pw_set(username=username, password=password)
 
-    mqtt_client.connect(
-        host=config.get("broker", {}).get("host", "localhost"),
-        port=config.get("broker", {}).get("port", 1883),
-    )
+    retry_count = 0
+    while retry_count < 10:
+        try:
+            mqtt_client.connect(
+                host=config.get("broker", {}).get("host", "localhost"),
+                port=config.get("broker", {}).get("port", 1883),
+            )
+            break
+        except OSError as e:
+            logger.error("Failed to connect to MQTT broker: %s", e)
+            retry_count += 1
+            time.sleep(1)
+    else:
+        msg = "Failed to connect to MQTT broker after multiple retries. Exiting..."
+        raise ConnectionError(msg)
+
     mqtt_client.disconnect()
 
     RuuviTagSensor.get_datas(on_ruuvi_event)
