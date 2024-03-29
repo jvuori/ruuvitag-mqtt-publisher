@@ -19,7 +19,6 @@ mqtt_client = mqtt.Client("RuuviTag")
 
 
 def on_ruuvi_event(ruuvi_event):
-    logger.info("Received RuuviTag event: %s", ruuvi_event)
     mac_address, data = ruuvi_event
     configured_ruuvitags = config.get("ruuvitags", {})
     location = configured_ruuvitags.get(mac_address, {}).get("name", mac_address)
@@ -76,9 +75,6 @@ def start_publishing(config_file_path: Path):
     logger.info("Connected to MQTT broker")
 
     mqtt_client.disconnect()
-
-    found_tags = RuuviTagSensor.find_ruuvitags()
-    logger.info("Found RuuviTags: %s", found_tags)
 
     RuuviTagSensor.get_datas(on_ruuvi_event)
 
