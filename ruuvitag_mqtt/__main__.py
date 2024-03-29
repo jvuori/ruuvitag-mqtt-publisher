@@ -38,7 +38,7 @@ def on_ruuvi_event(ruuvi_event):
 
 
 def start_publishing(config_file_path: Path):
-    global config
+    global config, mqtt_client
 
     logger.info("Using config file: %s", config_file_path)
 
@@ -48,16 +48,16 @@ def start_publishing(config_file_path: Path):
         config = json.load(config_file)
     print(config)
 
-    username = config.get("broker", {}).get("username")
-    if username:
-        logger.info("Using authentication: %s", username)
-        password = config.get("broker", {}).get("password")
-        mqtt_client.username_pw_set(username=username, password=password)
-
     logger.info("Connecting to MQTT broker")
     retry_count = 0
     while retry_count < 10:
         try:
+            username = config.get("broker", {}).get("username")
+            if username:
+                logger.info("Using authentication: %s", username)
+                password = config.get("broker", {}).get("password")
+                mqtt_client.username_pw_set(username=username, password=password)
+
             mqtt_client.connect(
                 host=config.get("broker", {}).get("host", "localhost"),
                 port=config.get("broker", {}).get("port", 1883),
@@ -68,6 +68,8 @@ def start_publishing(config_file_path: Path):
             logger.info("Retrying in 10 seconds. Retry count: %d", retry_count + 1)
             retry_count += 1
             time.sleep(10)
+            del mqtt_client
+            mqtt_client = mqtt.Client("RuuviTag")
     else:
         msg = "Failed to connect to MQTT broker after multiple retries. Exiting..."
         raise ConnectionError(msg)
