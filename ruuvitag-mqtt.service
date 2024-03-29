@@ -1,6 +1,6 @@
 [Unit]
 Description=RuuviTag MQTT Publisher
-After=network.target mosquitto.service
+After=network.target mosquitto.service bluetooth.service
 StartLimitIntervalSec=0
 
 [Service]
