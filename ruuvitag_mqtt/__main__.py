@@ -1,12 +1,16 @@
+import os
 import argparse
 from pathlib import Path
 import json
 import logging
 import time
 
+os.environ["RUUVI_BLE_ADAPTER"] = "bleak"
+
 from paho.mqtt import client as mqtt
 from ruuvitag_sensor.ruuvi import RuuviTagSensor
 from ruuvitag_sensor import adapters
+import asyncio
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,10 +19,12 @@ logger = logging.getLogger(__name__)
 adapter = adapters.get_ble_adapter()
 logger.info("Using BLE adapter: %s", adapter)
 
+
 mqtt_client = mqtt.Client("RuuviTag")
 
 
 def on_ruuvi_event(ruuvi_event):
+    logger.info("Received event: %s", ruuvi_event)
     mac_address, data = ruuvi_event
     configured_ruuvitags = config.get("ruuvitags", {})
     location = configured_ruuvitags.get(mac_address, {}).get("name", mac_address)
@@ -36,7 +42,7 @@ def on_ruuvi_event(ruuvi_event):
     mqtt_client.disconnect()
 
 
-def start_publishing(config_file_path: Path):
+async def start_publishing(config_file_path: Path):
     global config, mqtt_client
 
     logger.info("Using config file: %s", config_file_path)
@@ -76,7 +82,8 @@ def start_publishing(config_file_path: Path):
 
     mqtt_client.disconnect()
 
-    RuuviTagSensor.get_datas(on_ruuvi_event)
+    async for ruuvi_event in RuuviTagSensor.get_data_async():
+        on_ruuvi_event(ruuvi_event)
 
 
 if __name__ == "__main__":
@@ -85,4 +92,7 @@ if __name__ == "__main__":
     args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
-    start_publishing(args.config_file)
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(start_publishing(args.config_file))
+    loop.close()
