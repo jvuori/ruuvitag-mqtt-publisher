@@ -24,7 +24,6 @@ mqtt_client = mqtt.Client("RuuviTag")
 
 
 def on_ruuvi_event(ruuvi_event):
-    logger.info("Received event: %s", ruuvi_event)
     mac_address, data = ruuvi_event
     configured_ruuvitags = config.get("ruuvitags", {})
     location = configured_ruuvitags.get(mac_address, {}).get("name", mac_address)
