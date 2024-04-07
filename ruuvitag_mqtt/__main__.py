@@ -20,7 +20,10 @@ adapter = adapters.get_ble_adapter()
 logger.info("Using BLE adapter: %s", adapter)
 
 
-mqtt_client = mqtt.Client("RuuviTag")
+mqtt_client = mqtt.Client(
+    callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+    client_id="RuuviTag",
+)
 
 
 def on_ruuvi_event(ruuvi_event):
