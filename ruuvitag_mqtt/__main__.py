@@ -21,7 +21,7 @@ logger.info("Using BLE adapter: %s", adapter)
 
 
 mqtt_client = mqtt.Client(
-    callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+    callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
     client_id="RuuviTag",
 )
 
@@ -77,7 +77,7 @@ async def start_publishing(config_file_path: Path):
             time.sleep(10)
             del mqtt_client
             mqtt_client = mqtt.Client(
-                callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+                callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
                 client_id="RuuviTag",
             )
 
@@ -98,7 +98,4 @@ if __name__ == "__main__":
     args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(start_publishing(args.config_file))
-    loop.close()
+    asyncio.run(start_publishing(args.config_file))
