@@ -18,58 +18,64 @@ Then clone the repo and run installation procedure:
     sudo python3 -m pip install .
     sudo ./setup_service.sh
 
-The setup script creates a [Systemd](https://www.freedesktop.org/wiki/Software/systemd/) setup file and enables the ```ruuvitag-mqtt.service``` to start automatically on startup.
+The setup script creates a [Systemd](https://www.freedesktop.org/wiki/Software/systemd/) setup file and enables the `ruuvitag-mqtt.service` to start automatically on startup.
 
-Note: For now _RuuviTag MQTT Publisher_ can't be run without ```sudo```. The restriction comes from ruuvitag-sensor library which uses ```sudo``` internally.
-
+Note: For now _RuuviTag MQTT Publisher_ can't be run without `sudo`. The restriction comes from ruuvitag-sensor library which uses `sudo` internally.
 
 ## Configuration
 
-Modify config file: ```/etc/ruuvitag-mqtt.conf```
+Modify config file: `/etc/ruuvitag-mqtt.json`
 
 Example:
 
 ```json
-    {
-        "broker": {
-            "host": "192.168.1.11",
-            "port": 1883,
-            "username": null,
-            "password": null
+{
+    "broker": {
+        "host": "192.168.1.11",
+        "port": 1883,
+        "username": null,
+        "password": null
+    },
+    "topic_prefix": "myhome/",
+    "ruuvitags": {
+        "DE:D4:96:2C:3C:78": {
+            "name": "kitchen",
+            "retain": false,
+            "fields": ["temperature", "humidity"]
         },
-        "topic_prefix": "myhome/",
-        "ruuvitags": {
-            "DE:D4:96:2C:3C:78": {
-                "name": "kitchen",
-                "retain": true,
-                "fields": ["temperature", "humidity"]
-            },
-            "E3:35:52:F1:D2:AA": {
-                "name": "terrace",
-                "retain": false,
-                "fields": ["temperature", "humidity", "pressure"]
-            },
-            "F9:89:71:39:A5:82": {
-                "name": "sauna",
-                "retain": true,
-                "fields": ["temperature", "humidity"]
-            }
+        "E3:35:52:F1:D2:AA": {
+            "name": "terrace",
+            "retain": false,
+            "fields": ["temperature", "humidity", "pressure"]
+        },
+        "F9:89:71:39:A5:82": {
+            "name": "sauna",
+            "retain": false,
+            "fields": ["temperature", "humidity"]
         }
     }
+}
 ```
 
+The above example will publish the following MQTT topics:
+
+-   myhome/kitchen/temperature
+-   myhome/kitchen/humidity
+-   myhome/terrace/temperature
+-   myhome/terrace/humidity
+-   myhome/terrace/pressure
+-   myhome/sauna/temperature
+-   myhome/sauna/humidity
 
 ## Start service
 
     systemctl start ruuvitag-mqtt.service
-
 
 # Troubleshooting
 
 Run _RuuviTag MQTT Publisher_ from terminal:
 
     sudo python3 -m ruuvitag_mqtt -c my_config_file.json
-
 
 # Alternatives and inspiration
 
