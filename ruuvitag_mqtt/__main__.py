@@ -76,7 +76,11 @@ async def start_publishing(config_file_path: Path):
             retry_count += 1
             time.sleep(10)
             del mqtt_client
-            mqtt_client = mqtt.Client("RuuviTag")
+            mqtt_client = mqtt.Client(
+                callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+                client_id="RuuviTag",
+            )
+
     else:
         msg = "Failed to connect to MQTT broker after multiple retries. Exiting..."
         raise ConnectionError(msg)
