@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import logging
 import time
+import threading
 
 os.environ["RUUVI_BLE_ADAPTER"] = "bleak"
 
@@ -31,7 +32,7 @@ def on_ruuvi_event(ruuvi_event):
     configured_ruuvitags = config.get("ruuvitags", {})
     location = configured_ruuvitags.get(mac_address, {}).get("name", mac_address)
     topic_prefix = config.get("topic_prefix", "")
-    mqtt_client.reconnect()
+
     for key, value in data.items():
         fields = configured_ruuvitags.get(mac_address, {}).get("fields")
         retain = configured_ruuvitags.get(mac_address, {}).get("retain", False)
@@ -41,7 +42,6 @@ def on_ruuvi_event(ruuvi_event):
                 value,
                 retain=retain,
             )
-    mqtt_client.disconnect()
 
 
 async def start_publishing(config_file_path: Path):
@@ -86,10 +86,15 @@ async def start_publishing(config_file_path: Path):
         raise ConnectionError(msg)
     logger.info("Connected to MQTT broker")
 
-    mqtt_client.disconnect()
+    # Start the MQTT network loop in a background thread
+    mqtt_client.loop_start()
 
-    async for ruuvi_event in RuuviTagSensor.get_data_async():
-        on_ruuvi_event(ruuvi_event)
+    try:
+        async for ruuvi_event in RuuviTagSensor.get_data_async():
+            on_ruuvi_event(ruuvi_event)
+    finally:
+        mqtt_client.loop_stop()
+        mqtt_client.disconnect()
 
 
 if __name__ == "__main__":
