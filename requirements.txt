@@ -1,3 +1,3 @@
-ruuvitag_sensor
+ruuvitag_sensor>=4.1
 paho-mqtt
 bleak

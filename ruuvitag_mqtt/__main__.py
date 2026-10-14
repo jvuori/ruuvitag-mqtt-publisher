@@ -36,7 +36,7 @@ def on_ruuvi_event(ruuvi_event):
     for key, value in data.items():
         fields = configured_ruuvitags.get(mac_address, {}).get("fields")
         retain = configured_ruuvitags.get(mac_address, {}).get("retain", False)
-        if fields is None or key in fields:
+        if value is not None and (fields is None or key in fields):
             mqtt_client.publish(
                 f"{topic_prefix}{location}/{key}",
                 value,
