@@ -8,13 +8,16 @@ cp network-watchdog.sh /usr/local/sbin/
 chmod +x /usr/local/sbin/network-watchdog.sh
 cp network-watchdog.service /etc/systemd/system/
 
-# Enable hardware watchdog via systemd (reboots if kernel/systemd hangs)
-if ! grep -q 'RuntimeWatchdogSec' /etc/systemd/system.conf; then
-    echo 'RuntimeWatchdogSec=15' >> /etc/systemd/system.conf
-    echo 'RebootWatchdogSec=10min' >> /etc/systemd/system.conf
-fi
+# Enable hardware watchdog via systemd drop-in (reboots if kernel/systemd hangs)
+mkdir -p /etc/systemd/system.conf.d
+cat > /etc/systemd/system.conf.d/watchdog.conf << 'WATCHDOG'
+[Manager]
+RuntimeWatchdogSec=15
+RebootWatchdogSec=10min
+WATCHDOG
 
 systemctl daemon-reload
+systemctl daemon-reexec
 systemctl enable ruuvitag-mqtt.service
 systemctl enable network-watchdog.service
 systemctl start network-watchdog.service
