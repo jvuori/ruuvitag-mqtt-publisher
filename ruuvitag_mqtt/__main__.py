@@ -35,7 +35,7 @@ logger.info("Using BLE adapter: %s", adapter)
 
 mqtt_client = mqtt.Client(
     callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-    client_id="RuuviTag",
+    client_id="RuuviTag-sauna",
 )
 
 
@@ -90,7 +90,7 @@ async def start_publishing(config_file_path: Path):
             del mqtt_client
             mqtt_client = mqtt.Client(
                 callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-                client_id="RuuviTag",
+                client_id="RuuviTag-sauna",
             )
 
     else:
