@@ -1,0 +1,13 @@
+[Unit]
+Description=Network Watchdog (reboot on persistent network failure)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/network-watchdog.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
