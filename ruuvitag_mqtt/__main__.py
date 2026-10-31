@@ -5,8 +5,20 @@ import json
 import logging
 import time
 import threading
+import multiprocessing
 
 os.environ["RUUVI_BLE_ADAPTER"] = "bleak"
+
+# Replace multiprocessing.Manager with a plain local list to avoid blocking
+# IPC in async context. The manager subprocess's ListProxy does synchronous
+# IPC on every 'in' check inside the async detection callback, which stalls
+# the event loop on slow hardware (Pi Zero W).
+class _LocalManager:
+    def start(self): pass
+    def shutdown(self): pass
+    def list(self): return []
+
+multiprocessing.Manager = _LocalManager
 
 from paho.mqtt import client as mqtt
 from ruuvitag_sensor.ruuvi import RuuviTagSensor
@@ -86,7 +98,6 @@ async def start_publishing(config_file_path: Path):
         raise ConnectionError(msg)
     logger.info("Connected to MQTT broker")
 
-    # Start the MQTT network loop in a background thread
     mqtt_client.loop_start()
 
     try:
